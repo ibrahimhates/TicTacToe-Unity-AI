@@ -316,7 +316,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameBoardRef: {fileID: 9124478711546530566, guid: e83a440d9137f4f4daac544c573c6c10, type: 3}
   CurrentPlayer: 2
-  GameOver: 0
+  GameOver: 1
   IsRestartable: 1
   StartGameButton: {fileID: 1227984580}
   QuitGameButton: {fileID: 1783987302}

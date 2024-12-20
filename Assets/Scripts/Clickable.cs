@@ -1,5 +1,6 @@
 using System;
-using Enum;
+using System.Linq;
+using Enums;
 using Helpers;
 using UnityEngine;
 
@@ -14,37 +15,28 @@ public class Clickable : MonoBehaviour
         ticTacToe = FindFirstObjectByType<TicTacToe>();
     }
 
-    void Update()
-    {
-    }
-
     private void OnMouseDown()
     {
         if (BoxProperties.BoxType == BoxType.None && !ticTacToe.GameOver)
         {
             var renderer = gameObject.GetComponent<SpriteRenderer>();
-            renderer.color =new Color(0.6f,0.6f,0.6f);
+            renderer.color = new Color(0.7f, 0.7f, 0.7f);
         }
     }
 
     private void OnMouseUp()
     {
-        if (BoxProperties.BoxType == BoxType.None && !ticTacToe.GameOver)
+        if (BoxProperties.BoxType == BoxType.None
+            && !ticTacToe.GameOver
+            && ticTacToe.CurrentPlayer == ticTacToe.PlayerSymbol)
         {
-            if (ticTacToe.CurrentPlayer == BoxType.X)
-            {
-                BoxProperties.BoxType = BoxType.X;
-                var renderer = gameObject.GetComponent<SpriteRenderer>();
-                renderer.sprite = TictactoeSprites.GetXMoveSprite;
-                renderer.color = new Color(1,1,1);
-            }
-            else
-            {
-                BoxProperties.BoxType = BoxType.O;
-                var renderer = gameObject.GetComponent<SpriteRenderer>();
-                renderer.sprite = TictactoeSprites.GetOMoveSprite;
-                renderer.color = new Color(1,1,1);
-            }
+            BoxProperties.BoxType = ticTacToe.CurrentPlayer;
+            var renderer = gameObject.GetComponent<SpriteRenderer>();
+            renderer.sprite = ticTacToe.PlayerSymbol == BoxType.X
+                ? TictactoeSprites.GetXMoveSprite
+                : TictactoeSprites.GetOMoveSprite;
+            renderer.color = new Color(1, 1, 1);
+            ticTacToe.Board[BoxProperties.Row, BoxProperties.Column] = ticTacToe.CurrentPlayer;
 
             var hasWinner = ticTacToe.CheckWinner();
             if (hasWinner)
