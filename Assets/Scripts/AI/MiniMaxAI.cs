@@ -78,10 +78,10 @@ namespace AI
                             int score = MiniMax(board, depth + 1, false,alpha, beta);
                             board[i, j] = BoxType.None;
                             bestScore = Math.Max(score, bestScore);
-                            // alpha = Math.Max(alpha, score);
-                            //
-                            // if (beta <= alpha)
-                            //     return bestScore;
+                            alpha = Math.Max(alpha, score);
+                            
+                            if (beta <= alpha)
+                                return bestScore;
                         }
                     }
                 }
@@ -101,10 +101,10 @@ namespace AI
                             int score = MiniMax(board, depth + 1, true,alpha, beta);
                             board[i, j] = BoxType.None;
                             bestScore = Math.Min(score, bestScore);
-                            // beta = Math.Min(beta, score);
-                            //
-                            // if (beta <= alpha)
-                            //     return bestScore;
+                            beta = Math.Min(beta, score);
+                            
+                            if (beta <= alpha)
+                                return bestScore;
                         }
                     }
                 }
