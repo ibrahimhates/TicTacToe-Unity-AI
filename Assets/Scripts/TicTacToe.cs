@@ -20,6 +20,7 @@ public class TicTacToe : MonoBehaviour
     public Button QuitGameButton;
     public Dropdown GameSizeDropdown;
     public Dropdown PlayerSymbolDropdown;
+    public Dropdown DepthDropdown;
     public BoxType[,] Board;
     public BoxType PlayerSymbol { get; private set; }
     public MiniMaxAI MiniMaxAI { get; private set; }
@@ -83,7 +84,12 @@ public class TicTacToe : MonoBehaviour
         
         GameSize = int.Parse(GameSizeDropdown.options[GameSizeDropdown.value].text);
         
-        MiniMaxAI.SetGameSettings(GameSize, PlayerSymbol);
+        if(DepthDropdown.value == 0)
+            return;
+        
+        var depth = int.Parse(DepthDropdown.options[DepthDropdown.value].text);
+        
+        MiniMaxAI.SetGameSettings(GameSize, PlayerSymbol,depth);
         StartCoroutine(DrawGameBoard());
         StartGameButton.onClick.RemoveAllListeners();
         StartGameButton.onClick.AddListener(RestartGameListener);
@@ -107,7 +113,13 @@ public class TicTacToe : MonoBehaviour
         PlayerSymbol  = (BoxType)Enum.Parse(typeof(BoxType),dropDownValue);
         
         GameSize = int.Parse(GameSizeDropdown.options[GameSizeDropdown.value].text);
-        MiniMaxAI.SetGameSettings(GameSize, PlayerSymbol);
+        
+        if(DepthDropdown.value == 0)
+            return;
+        
+        var depth = int.Parse(DepthDropdown.options[DepthDropdown.value].text);
+        
+        MiniMaxAI.SetGameSettings(GameSize, PlayerSymbol,depth);
         
         var allobjests = FindObjectsByType<Clickable>(FindObjectsInactive.Exclude, FindObjectsSortMode.InstanceID);
         foreach (var clickable in allobjests)
@@ -210,15 +222,18 @@ public class TicTacToe : MonoBehaviour
         }
         
         int openSpots = 0;
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < GameSize; i++)
         {
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < GameSize; j++)
             {
                 if (Board[i, j] == BoxType.None)
                 {
                     openSpots++;
+                    break;
                 }
             }
+            if(openSpots > 0)
+                break;
         }
 
         if (openSpots == 0)

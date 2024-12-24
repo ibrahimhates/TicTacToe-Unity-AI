@@ -10,15 +10,17 @@ namespace AI
         private int gameSize = 3;
         private BoxType playerSymbol;
         private BoxType aiSymbol;
+        private int depth = 3;
         public MiniMaxAI(WinChecker winChecker)
         {
             this.winChecker = winChecker;
         }
         
-        public void SetGameSettings(int size,BoxType playerSymbol)
+        public void SetGameSettings(int size,BoxType playerSymbol,int depth)
         {
             gameSize = size; 
             this.playerSymbol = playerSymbol;
+            this.depth = depth;
             aiSymbol = playerSymbol == BoxType.X ? BoxType.O : BoxType.X;
         }
 
@@ -53,7 +55,7 @@ namespace AI
         {
             var result = winChecker.CheckWinner(board, gameSize);
             
-            if(depth == 3)
+            if(depth == this.depth)
             {
                 return 0;
             }
